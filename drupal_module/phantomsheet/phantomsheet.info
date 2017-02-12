@@ -1,0 +1,6 @@
+name = Phantom Sheet
+description = GHOST ANALYTICS TESTING
+dependencies[] = libraries (2.x)
+dependencies[] = phpexcel
+dependencies[] = entity
+core = 7.x

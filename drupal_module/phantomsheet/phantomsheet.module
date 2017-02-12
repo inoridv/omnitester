@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Phantom Sheet Hooks.
+ *
+ */
+
+ /**
+  * Implements hook_menu().
+  */
+ function phantomsheet_menu() {
+   $items = array();
+
+   $items['run'] = array(
+     'title' => 'Run Test',
+     'description' => 'Run your omniture test',
+     'page callback' => 'drupal_get_form',
+     'page arguments' => array('phantomsheet_run_test_form'),
+     'access arguments' => array(''),
+     'file' => 'inc/phantomsheet.form.inc',
+   );
+
+   return $items;
+ }

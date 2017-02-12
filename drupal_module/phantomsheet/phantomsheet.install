@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Setup and Cleanup functions for Phantomsheet Module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function phantomsheet_install() {
+  // Create a folder to store the uploaded images.
+  $directory = 'public://phantomsheet';
+  file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function phantomsheet_uninstall() {
+
+  // TODO: Check if this is needed
+  //
+  // // Now to delete our sheets folder, first we must get the
+  // // fids of our managed files.
+  // $query = 'SELECT fid from {file_managed} WHERE uri LIKE :directory';
+  // $result = db_query($query, array(':directory' => "public://gvision/%"));
+  // $files = $result->fetchAll();
+  //
+  // if (is_array($files) && !empty($files)) {
+  //   // Now we load each file to delete it through the file_delete function.
+  //   foreach ($files as $file) {
+  //     $loaded_file = file_load($file->fid);
+  //     file_delete($loaded_file);
+  //   }
+  // }
+  //
+  // // At last but not least, the folder is deleted too.
+  // $directory = 'public://gvision';
+  // if (is_dir($directory)) {
+  //   drupal_rmdir($directory);
+  // }
+}
