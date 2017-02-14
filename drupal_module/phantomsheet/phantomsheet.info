@@ -1,5 +1,5 @@
 name = Phantom Sheet
-description = GHOST ANALYTICS TESTING
+description = Analytics Automated Test
 dependencies[] = libraries (2.x)
 dependencies[] = phpexcel
 dependencies[] = entity

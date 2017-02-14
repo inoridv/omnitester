@@ -50,15 +50,18 @@ if (system.args.length < 4) {
         var linkRequest = 0;
 
         console.log("Starting Test \n");
+        console.log(JSON.stringify(testData));
 
         page.onResourceRequested = function (req) {
             var requeststring = JSON.stringify(req, undefined, 4);
             var jsonrequest = JSON.parse(requeststring);
             url = jsonrequest.url;
-            if (jsonrequest.url.indexOf('smetric') !== -1) {
+            // TODO: Fill response with something if no requests matching the
+            // identifier are found.
+            if (jsonrequest.url.indexOf(testData.post.RequestIdentifier) !== -1) {
               var queryString = {};
               url = decodeURIComponent(url);
-              // TODO: Check this code.
+              // TODO: Check and improve this code if possible.
               url.replace(regex, function($0, $1, $2, $3) { queryString[$1] = $3; });
               if (!testResult.Type) {
                 testResult.Type = {};
@@ -141,14 +144,14 @@ if (system.args.length < 4) {
                     var ev = document.createEvent("MouseEvents");
                     ev.initEvent("click", true, true);
                     document.querySelector(testData.post.Element).dispatchEvent(ev);
-                    // TODO: check if this returns something to know if element was not found
+                    // TODO: check if this returns something to know if Element
+                    // was not found, and if so, treat it correctly.
                   }, testData, linkRequest);
                 }
               }, 5000, linkRequest);
             } else {
               // TODO: send status too.
               // TODO: consume this on PHP.
-              // Create a URL field on php to point to localhost.
               testResult.execute = 'Fail';
               testResult.message = 'Failed to load Page';
             }

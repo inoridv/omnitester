@@ -9,6 +9,9 @@
  * Form for setting up request settings.
  */
 function phantomsheet_run_test_form($form, &$form_state) {
+
+  $form = array();
+
   $form['phantomsheet_sheet'] = array(
     '#type' => 'managed_file',
     '#title' => t('Test Sheet'),
@@ -17,6 +20,12 @@ function phantomsheet_run_test_form($form, &$form_state) {
     '#upload_validators' => array(
       'file_validate_extensions' => array('xls xlsx'),
     ),
+  );
+
+  $form['phantomsheet_test_server_url'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Test server URL'),
+    '#required' => TRUE,
   );
 
   $form['submit'] = array(
@@ -38,13 +47,12 @@ function phantomsheet_run_test_form($form, &$form_state) {
  */
 function phantomsheet_ajax_run_test($form, &$form_state) {
   $fid = $form_state['values']['phantomsheet_sheet'];
+  $test_server = $form_state['values']['phantomsheet_test_server_url'];
+
   $file = file_load($fid);
 
   module_load_include('inc', 'phpexcel');
   $sheet = phpexcel_import($file->uri);
-
-  // TODO: add url field here.
-   $url = 'http://localhost:8001';
 
    $options = array(
        'http' => array(
@@ -66,7 +74,7 @@ function phantomsheet_ajax_run_test($form, &$form_state) {
     $options['http']['content'] = http_build_query($row);
 
     $context  = stream_context_create($options);
-    $result = json_decode(file_get_contents($url, false, $context));
+    $result = json_decode(file_get_contents($test_server, false, $context));
 
     $test_status = 'Fail';
 
