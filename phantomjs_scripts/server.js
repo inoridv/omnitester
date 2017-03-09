@@ -30,8 +30,8 @@ function responseCrafter(response, testResultData) {
   response.close();
 }
 
-if (system.args.length < 4) {
-    console.log('Usage: server.js <some port> <auth_login> <auth_password>');
+if (system.args.length < 2) {
+    console.log('Usage: server.js <some port>');
     phantom.exit(1);
 } else {
     port = system.args[1];
@@ -39,6 +39,7 @@ if (system.args.length < 4) {
         console.log("Received HTTP Request");
         var jsonRequest = JSON.stringify(request, null, 4);
         var testData = JSON.parse(jsonRequest);
+        console.log(JSON.stringify(testData));
 
         // Runtest Start
         var page = require('webpage').create();
@@ -66,6 +67,9 @@ if (system.args.length < 4) {
               if (!testResult.Type) {
                 testResult.Type = {};
               }
+              console.log(JSON.stringify(queryString));
+              console.log("TESTRESULT CHECK\n")
+              console.log(JSON.stringify(testResult));
               testResult.Type = testData.post.Type;
               if (testData.post.Type == 'Link') {
                 if (queryString.link) {
@@ -93,7 +97,9 @@ if (system.args.length < 4) {
                   else {
                     testResult.Link.status = 'Fail';
                   }
-                  testResult.Link.found = queryString.link;
+                  if (!testResult.Link.found) {
+                    testResult.Link.found = queryString.link;
+                  }
                   testResult.Link.expected = testData.post.Link;
                   console.log("Link Text Test Finished");
                 }
@@ -130,25 +136,34 @@ if (system.args.length < 4) {
             }
         };
 
-        page.onConsoleMessage = function (msg) { console.log("pagelog" + msg + "\n"); };
+        page.onConsoleMessage = function (msg) { console.log("pagelogee  " + msg + "\n"); };
 
-        page.settings.userName = system.args[2] ? system.args[2] : '';
-        page.settings.password = system.args[3] ? system.args[3] : '';
+        page.settings.userName = testData.post.username;
+        page.settings.password = testData.post.password;
+        var pageUrl = testData.post.base_url + testData.post.RelativePath;
 
-        page.open(testData.post.URL, function (status) {
+        page.open(pageUrl, function (status) {
             if (status === "success") {
-              setTimeout(function(linkRequest){
+              setTimeout(function(linkRequest, testResult){
                 if(testData.post.Element && testData.post.Type == "Link") {
-                  page.evaluate(function(testData, linkRequest) {
+                  page.evaluate(function(testData, linkRequest, testResult) {
                     linkRequest = 1;
                     var ev = document.createEvent("MouseEvents");
                     ev.initEvent("click", true, true);
-                    document.querySelector(testData.post.Element).dispatchEvent(ev);
-                    // TODO: check if this returns something to know if Element
-                    // was not found, and if so, treat it correctly.
-                  }, testData, linkRequest);
+                    var element = document.querySelector(testData.post.Element);
+                    if (element == null) {
+                      if (!testResult.Link) {
+                        testResult.Link = {};
+                      }
+                      testResult.Link.found = 'Element not found in the page';
+                    }
+                    else {
+                      element.dispatchEvent(ev);
+                    }
+                    console.log(JSON.stringify(testResult));
+                  }, testData, linkRequest, testResult);
                 }
-              }, 5000, linkRequest);
+              }, 5000, linkRequest, testResult);
             } else {
               // TODO: send status too.
               // TODO: consume this on PHP.
@@ -157,9 +172,10 @@ if (system.args.length < 4) {
             }
         });
           setTimeout(function(){
-            console.log("Finished Test");
+            console.log("Finished Test\n");
+            console.log(JSON.stringify(testResult) + "\n");
             responseCrafter(response, testResult);
-      }, 20000);
+      }, 20000, testResult);
 
     });
     if (!listening) {
