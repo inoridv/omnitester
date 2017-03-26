@@ -11,7 +11,7 @@ install:
   - phpenv config-rm xdebug.ini
   # add composer's global bin directory to the path
   # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.config/composer/vendor/bin:$PATH"
+  - export PATH="$HOME/travis/.config/composer/vendor/bin:$PATH"
 
   # Install PHP_CodeSniffer and Drupal config
   - composer global require drupal/coder
