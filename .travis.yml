@@ -16,7 +16,8 @@ install:
   # Install PHP_CodeSniffer and Drupal config
   - composer global require drupal/coder
   - composer global show -P
-  - ls ~/travis/.config/composer/vendor/bin
+  - ls ~/travis/.config/composer/vendor
+  - ls ~/travis/.config/composer/bin
   - phpcs --config-set installed_paths ~/travis/.config/composer/vendor/drupal/coder/coder_sniffer
 
 before_script:
