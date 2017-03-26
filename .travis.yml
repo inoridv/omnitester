@@ -15,7 +15,8 @@ install:
 
   # Install PHP_CodeSniffer and Drupal config
   - composer global require drupal/coder
-  - phpcs --config-set installed_paths ~/.config/composer/vendor/drupal/coder/coder_sniffer
+  - composer global show -i
+  - phpcs --config-set installed_paths ~/travis/.config/composer/vendor/drupal/coder/coder_sniffer
 
 before_script:
   # This slows things down but it ensures all remote branches are fetched.
