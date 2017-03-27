@@ -15,7 +15,7 @@ install:
 
   # Install PHP_CodeSniffer and Drupal config
   - composer global require drupal/coder
-  
+
   - phpcs --config-set installed_paths ~/travis/.config/composer/vendor/drupal/coder/coder_sniffer
 
 before_script:
@@ -23,7 +23,7 @@ before_script:
   - git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
   - git fetch origin
 
-script: ./travis.sh
+script: ./scripts/travis-build.sh
 
 notifications:
   email:
