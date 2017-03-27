@@ -9,7 +9,7 @@ drupal_module/phantomsheet
 :!*.csv
 "
 
-CHANGED_FILES="$(git diff --name-only --diff-filter=d origin/dev -- $PATHS)"
+CHANGED_FILES="$(git diff --name-only --diff-filter=d origin/master -- $PATHS)"
 
 if [[ -n "${CHANGED_FILES// }" ]]; then
   echo "$CHANGED_FILES" | xargs phpcs -v --standard=Drupal,DrupalPractice
