@@ -13,8 +13,6 @@ CHANGED_FILES="$(git diff --name-only --diff-filter=d origin/master -- $PATHS)"
 
 echo $CHANGED_FILES
 
-phpcs --standard=Drupal,DrupalPractice drupal_module/phantomsheet
-
 if [[ -n "${CHANGED_FILES// }" ]]; then
   echo "$CHANGED_FILES" | xargs phpcs -v --standard=Drupal,DrupalPractice
 
