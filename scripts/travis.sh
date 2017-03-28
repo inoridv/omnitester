@@ -2,7 +2,7 @@
 set -e
 
 PATHS="
-./../drupal_module/phantomsheet
+drupal_module/phantomsheet
 :!*.less
 :!*.png
 :!*.json
